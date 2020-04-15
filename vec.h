@@ -39,4 +39,6 @@ public:
     int     search(T e, int lo, int hi);
     void    swap(int x, int y);
     void    sort(int lo, int hi);
+
+    T& operator[] (int r) const;
 };

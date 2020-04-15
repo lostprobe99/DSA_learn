@@ -1,4 +1,25 @@
-#include "tvec.h"
+#include"vec.hpp"
+#include"vec.h"
+#include<iostream>
+using std::cin;
+using std::cout;
+using std::endl;
+
+void test_vec();
+
+class print{
+public:
+    print(){}
+    void operator()(int & e)
+    {   printf("%d ", e);   }
+};
+class sum{
+public:
+    int _sum;
+    sum() : _sum(0) {}
+    void operator()(int & e)
+    {   _sum += e;   }
+};
 
 void test_vec()
 {
@@ -32,4 +53,15 @@ void test_vec()
     sum s;
     v1.traverse(s);
     cout << "sum of v1: "<< s._sum << endl;
+
+    cout << "use operator[] read " << endl;
+    for(int i = 0; i < v1.size(); i++)
+        cout << v1[i] << " ";
+
+    cout << endl;
+    cout << "use operator[] modify " << endl;
+    for(int i = 0; i < v1.size(); i++)
+    {
+        cout << (v1[i] = i) << " ";
+    }
 }

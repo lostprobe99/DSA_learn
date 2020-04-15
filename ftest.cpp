@@ -6,10 +6,7 @@
 #include<time.h>
 #include<math.h>
 
-// #include"tstack.h"
-// #include"tvec.h"
-// #include"tlist.h"
-// #include"tqueue.h"
+#include"test_vec.cpp"
 
 using std::cin;
 using std::cout;
@@ -22,6 +19,7 @@ int main()
     // test_stack();
     // apply_stk();
     // test_que();
+    test_vec();
 
     return 0;
 }

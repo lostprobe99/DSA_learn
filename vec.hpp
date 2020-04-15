@@ -218,3 +218,7 @@ void vec<T>::sort(int lo, int hi)
     // bubble_sort(lo, hi);
     merge_sort(lo, hi);
 }
+
+template <typename T>
+T& vec<T>::operator[](int r) const
+{   return _elem[r];    }
