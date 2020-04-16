@@ -1,8 +1,7 @@
 #include "vec.h"
-#include<stdlib.h>
 
 template <typename T>
-vec<T>::vec(int c)
+vec<T>::vec(int c, int s, T v)
 {
     _elem = new T[_capacity = c];
     _size = 0;
@@ -46,7 +45,7 @@ T & vec<T>::get(int r) const
 {   return _elem[r];    }
 
 template <typename T>
-void vec<T>::put(int r, T e)
+void vec<T>::put(int r, const T& e)
 {   _elem[r] = e;   }
 
 template <typename T>
@@ -74,14 +73,19 @@ void vec<T>::shrink()
 }
 
 template <typename T>
-void vec<T>::insert(int r, T e)
+int vec<T>::insert(int r, const T& e)
 {
     expand();
     for(int i = _size - 1; i >= r; i--)
         _elem[i + 1] = _elem[i];
     _size++;
     _elem[r] = e;
+    return r;
 }
+
+template<typename T>
+int vec<T>::insert(const T& e)
+{   return insert(_size, e);    }
 
 template <typename T>
 T vec<T>::remove(int r)
@@ -106,7 +110,7 @@ int vec<T>::remove(int lo, int hi)
 }
 
 template <typename T>
-bool vec<T>::is_increase(T x, T y)
+bool vec<T>::is_increase(const T& x, const T& y)
 {   return x > y;   }
 
 template <typename T>
@@ -120,7 +124,7 @@ int vec<T>::disorder(bool increase) const
 }
 
 template<typename T>
-int vec<T>::find(T e, int lo, int hi) const
+int vec<T>::find(const T& e, int lo, int hi) const
 {
     int i = 0;
     for(i = lo; _elem[i] != e && i < hi; i++);

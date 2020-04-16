@@ -3,10 +3,9 @@
 
 #include<limits.h>
 #include"graph.h"
-#include"vec.hpp"
 
 template<typename Tv>
-struct vertex   // 定点
+struct vertex   // 顶点
 {
     Tv data;    // 数据
     int in_degree, out_degree; // 出入度数
@@ -40,8 +39,15 @@ private:
     vec<vec<edge<Te>*> >   E;
 
 public:
-    graph_matrix();
-    ~graph_matrix();
+    graph_matrix()
+    {   n = 0;  e = 0;  }
+
+    ~graph_matrix()
+    {
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < n; j++)
+            delete E[i][j];
+    }
     int      insert (const Tv& );
     Tv       remove (int);
     Tv&      vertex(int) const;
