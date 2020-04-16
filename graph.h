@@ -46,20 +46,20 @@ public:
     int n; // 点和点操作
     virtual int      insert (const Tv& ) = 0;
     virtual Tv       remove (int) = 0;
-    virtual Tv&      vertex(int) = 0;
-    virtual int      inDegree(int) = 0;
-    virtual int      outDegree(int) = 0;
-    virtual int&     fTime(int) = 0;
-    virtual int&     dTime(int) = 0;
-    virtual int&     parent(int) = 0;
-    virtual int&     priority(int) = 0;
-    virtual vstatus& status(int) = 0;
+    virtual Tv&      vertex(int) const = 0;
+    virtual int      inDegree(int) const = 0;
+    virtual int      outDegree(int) const = 0;
+    virtual int&     fTime(int) const = 0;
+    virtual int&     dTime(int) const = 0;
+    virtual int&     parent(int) const = 0;
+    virtual int&     priority(int) const = 0;
+    virtual vstatus& status(int) const = 0;
 
     int e;  // 边和边操作
-    virtual bool     exists(int, int) = 0;
-    virtual etype&   type(int, int) = 0;
-    virtual int&     weight(int, int) = 0;
-    virtual Te&      edge(int, int) = 0;
+    virtual bool     exists(int, int) const = 0;
+    virtual etype&   type(int, int) const = 0;
+    virtual int&     weight(int, int) const = 0;
+    virtual Te&      edge(int, int) const = 0;
     virtual void     insert(int, int, const Te&, int) = 0;
     virtual Te       remove(int, int) = 0;
 };

@@ -42,14 +42,23 @@ private:
 public:
     graph_matrix();
     ~graph_matrix();
-};
+    int      insert (const Tv& );
+    Tv       remove (int);
+    Tv&      vertex(int) const;
+    int      inDegree(int) const;
+    int      outDegree(int) const;
+    int&     fTime(int) const;
+    int&     dTime(int) const;
+    int&     parent(int) const;
+    int&     priority(int) const;
+    vstatus& status(int) const;
 
-template<typename Tv, typename Te>
-inline void graph_matrix<Tv, Te>::insert(int i, int j, const Te& edge, int weight)
-{
-    E[i][j] = new edge(edge, weight);
-    V[i].out_degree++;
-    V[j].in_degree++;
-}
+    bool     exists(int, int) const;
+    etype&   type(int, int) const;
+    int&     weight(int, int) const;
+    Te&      edge(int, int) const;
+    void     insert(int, int, const Te&, int);
+    Te       remove(int, int);
+};
 
 #endif
