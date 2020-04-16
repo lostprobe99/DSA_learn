@@ -6,7 +6,7 @@
 #include<time.h>
 #include<math.h>
 
-#include"test_vec.cpp"
+// #include"test_vec.cpp"
 
 using std::cin;
 using std::cout;
@@ -19,7 +19,6 @@ int main()
     // test_stack();
     // apply_stk();
     // test_que();
-    test_vec();
 
     return 0;
 }

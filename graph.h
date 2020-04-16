@@ -60,7 +60,7 @@ public:
     virtual etype&   type(int, int) = 0;
     virtual int&     weight(int, int) = 0;
     virtual Te&      edge(int, int) = 0;
-    virtual void     insert(int, int) = 0;
+    virtual void     insert(int, int, const Te&, int) = 0;
     virtual Te       remove(int, int) = 0;
 };
 

@@ -1,5 +1,5 @@
-#ifndef _VERTEX_H_
-#define _VERTEX_H_
+#ifndef _GRAPH_MATRIX_H_
+#define _GRAPH_MATRIX_H_
 
 #include<limits.h>
 #include"graph.h"
@@ -43,5 +43,13 @@ public:
     graph_matrix();
     ~graph_matrix();
 };
+
+template<typename Tv, typename Te>
+inline void graph_matrix<Tv, Te>::insert(int i, int j, const Te& edge, int weight)
+{
+    E[i][j] = new edge(edge, weight);
+    V[i].out_degree++;
+    V[j].in_degree++;
+}
 
 #endif
