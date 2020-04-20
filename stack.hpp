@@ -1,21 +1,28 @@
-#include "stack.h"
-#include "vec.hpp"
+#ifndef _STACK_H_
+#define _STACK_H_
+
+#include"vec.hpp"
 
 template <typename T>
-inline bool stack<T>::empty() const
-{   return this->size() == 0 ? true : false;    }
+class stack : public vec<T>
+{
+public:
+    stack() {}
+    ~stack() {}
+    bool empty() const
+    {   return this->size() == 0 ? true : false;    }
 
-template <typename T>
-inline void stack<T>::push(T const & e)
-{   this->insert(this->size(), e); }
+    void push(T const & e)
+    {   this->insert(this->size(), e); }
 
-template <typename T>
-inline T & stack<T>::top()
-{   return this->get(this->size() - 1); }
+    T & top()
+    {   return this->get(this->size() - 1); }
 
-template <typename T>
-inline T stack<T>::pop()
-{   
-    if(this->size() > 0)
-        return this->remove(this->size() - 1);  
-}
+    T pop()
+    {   
+        if(this->size() > 0)
+            return this->remove(this->size() - 1);  
+    }
+};
+
+#endif

@@ -2,9 +2,6 @@
 #define _LIST_H_
 
 #include<stdlib.h>
-#include<iostream>
-using std::cout;
-using std::endl;
 
 #define posi(T) listnode<T>*
 template <typename T>
