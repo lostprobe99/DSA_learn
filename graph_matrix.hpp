@@ -51,10 +51,11 @@ inline Te& graph_matrix<Tv, Te>::edge(int i, int j) const
 {   return E[i][j]->data;   }
 
 template<typename Tv, typename Te>
-inline void graph_matrix<Tv, Te>::insert(int i, int j, const Te& edge, int weight)
+inline void graph_matrix<Tv, Te>::insert(int i, int j, const Te& ed, int w)
 {
+    // 如果边已存在，直接返回
     if(exists(i, j))    return;
-    E[i][j] = new edge(edge, weight);
+    E[i][j] = new edge(ed, w);
     V[i].out_degree++;
     V[j].in_degree++;
     e++;
@@ -104,10 +105,9 @@ inline Tv graph_matrix<Tv, Te>::remove(int i)
         {
             delete E[j][i];
             V[j].out_degree--;
-         
         }
     }
-    Tv vBad = vertex(i);
+    Tv vBak = vertex(i);
     V.remove(i);
     return vBak;
 }

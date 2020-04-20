@@ -11,7 +11,7 @@ private:
     T * _elem;
     int _size, _capacity;
     void copy_from(T * a, int lo, int hi);
-    bool is_increase(T x, T y);
+    bool is_increase(const T& x, const T& y);
     void bubble_sort(int lo, int hi);
     int  bubble(int lo, int hi);
     void merge_sort(int lo, int hi);

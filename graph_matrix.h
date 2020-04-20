@@ -11,7 +11,7 @@ struct vertex   // 顶点
     int in_degree, out_degree; // 出入度数
     vstatus status; // 状态
     int dtime, ftime; //记录定点被发现和访问完的时刻
-    int parent; // 父节点
+    int parent; // 父节点数量
     int priority;   // 在遍历树中的优先级
     vertex(const Tv& d)
     : data(d), in_degree(0), out_degree(0),\
@@ -48,6 +48,8 @@ public:
         for(int j = 0; j < n; j++)
             delete E[i][j];
     }
+
+    int n;
     int      insert (const Tv& );
     Tv       remove (int);
     Tv&      vertex(int) const;
@@ -59,6 +61,7 @@ public:
     int&     priority(int) const;
     vstatus& status(int) const;
 
+    int e;
     bool     exists(int, int) const;
     etype&   type(int, int) const;
     int&     weight(int, int) const;
