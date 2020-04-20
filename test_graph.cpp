@@ -1,5 +1,7 @@
-#include"graph_matrix.hpp"
-void test_graph_matrix()
+#include"graph_matrix.h"
+int main()
 {
-    graph_matrix<int, int> g;
+    graph_matrix<int, int> g1;
+
+    return 0;
 }

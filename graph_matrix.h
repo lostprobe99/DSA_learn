@@ -32,7 +32,7 @@ struct edge
 };
 
 template<typename Tv, typename Te>
-class graph_matrix : public graph<Tv, Te>
+class graph_matrix
 {
 private:
     vec<vertex<Tv> > V;
@@ -48,26 +48,103 @@ public:
         for(int j = 0; j < n; j++)
             delete E[i][j];
     }
+    
+    int n, e;
+    Tv& vertex(int i) const
+    {   return V[i].data;   }
 
-    int n;
-    int      insert (const Tv& );
-    Tv       remove (int);
-    Tv&      vertex(int) const;
-    int      inDegree(int) const;
-    int      outDegree(int) const;
-    int&     fTime(int) const;
-    int&     dTime(int) const;
-    int&     parent(int) const;
-    int&     priority(int) const;
-    vstatus& status(int) const;
+    int inDegree(int i) const
+    {   return V[i].in_degree;  }
 
-    int e;
-    bool     exists(int, int) const;
-    etype&   type(int, int) const;
-    int&     weight(int, int) const;
-    Te&      edge(int, int) const;
-    void     insert(int, int, const Te&, int);
-    Te       remove(int, int);
+    int outDegree(int i) const
+    {   return V[i].out_degree; }
+
+    int& fTime(int i) const
+    {   return V[i].ftime;  }
+
+    int& dTime(int i) const
+    {   return V[i].dtime;  }
+
+    int& parent(int i) const
+    {   return V[i].parent;  }
+
+    int& priority(int i) const
+    {   return V[i].priority;  }
+
+    vstatus& status(int i) const
+    {   return V[i].status;  }
+
+    bool exists(int i, int j) const
+    {
+        return (0 <= i) && (i < n) && (0 <= j) && (j < n) && E[i][j];
+    }
+
+    etype& type(int i, int j) const
+    {   return E[i][j]->type;   }
+
+    int& weight(int i, int j) const
+    {   return E[i][j]->weight; }
+
+    Te& edge(int i, int j) const
+    {   return E[i][j]->data;   }
+
+    void insert(int i, int j, const Te& ed, int w)
+    {
+        // 如果边已存在，直接返回
+        if(exists(i, j))    return;
+        E[i][j] = new edge(ed, w);
+        V[i].out_degree++;
+        V[j].in_degree++;
+        e++;
+    }
+
+    Te remove(int i, int j)
+    {
+        Te eBak = edge(i, j);
+        V[i].out_degree--;
+        V[i].in_degree--;
+        delete E[i][j];
+        E[i][j] = NULL;
+        e--;
+        return eBak;
+    }
+
+    int insert(const Tv& v)
+    {
+        for(int i = 0; i < n; i++)
+            E[i].insert(NULL);
+        n++;
+        E.insert(vec< edge<Te>* >(n, n, NULL)); // 添加一个容量，长度为n，初值为NULL 的边记录
+        return V.insert(vertex<Tv>(v));
+    }
+
+    Tv remove(int i)
+    {
+        // 删除 i 的出边
+        for(int j = 0; j < n; j++)
+        {
+            // 如果存在边(i, j)，移除边，和j 的入度
+            if(exists(i, j))
+            {
+                delete E[i][j];   // 删除 [i][j] 指向的内存，表中的 i 行仍存在
+                V[j].in_degree--;
+            }
+        }
+        E.remove(i);
+        n--;
+        // 删除 i 的入边
+        for(int j = 0; j < n; j++)
+        {
+            if(exists(j, i))
+            {
+                delete E[j][i];
+                V[j].out_degree--;
+            }
+        }
+        Tv vBak = vertex(i);
+        V.remove(i);
+        return vBak;
+    }
 };
 
 #endif
