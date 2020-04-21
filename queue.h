@@ -9,9 +9,15 @@ class queue : public list<T>
 public:
     queue() {}
     ~queue() {}
-    void enqueue(const T & e);
-    T    dequeue();
-    T &  front() const;
+
+    void queue<T>::enqueue(const T & e)
+    {   this->insert_before(this->tail(), e);  }
+
+    T queue<T>::dequeue()
+    {   this->remove(this->first());    }
+
+    T & queue<T>::front() const
+    {   return this->first()->data; }
 };
 
 #endif
