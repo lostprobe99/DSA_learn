@@ -1,3 +1,4 @@
+/* 暂完 后补 */
 #ifndef _GRAPH_H_
 #define _GRAPH_H_
 
@@ -37,30 +38,7 @@ private:
                 if(exists(i, j))    type(i, j) = UNDETERMINED;
         }
     }
-    void BFS(int v, int& clock)
-    {
-        queue<int> q;
-        q.enqueue(v);
-        status(v) = DISCOVERED;
-        while(!q.empty())
-        {
-            v = q.dequeue();
-            dTime(v) = ++clock;
-            for(int u = firstNbr(v), -1 < u; u = nextNbr(v, u))
-            {
-                if(status(u) == UNDISCOVERED)
-                {
-                    status(u) = DISCOVERED; // 如果定点 u 未被发现，入队
-                    q.enqueue(u);
-                    type(v, u) = TREE;  // 设置边的状态为 TREE 代表这条边被采纳
-                    parent(u) = v;  // 把 v 作为 u 的父节点
-                }
-                else    // 如果 u 在队列中(DISCOVERED)或已出队(VISITED)
-                    type(u, v) = CROSS;
-            }
-            status(v) = VISITED;    // 当 v 的所有邻边和相邻节点访问完成后，标记 v 为已访问
-        }
-    }
+    void BFS(int, int&);
     void DFS(int, int&);
     void BCC(int, int&, stack<Tv>&);
     bool TSort(int, int&, stack<Tv>*);
@@ -102,12 +80,77 @@ public:
             v = (++v) % n;
         }while(s != v)
     }
-    void dfs(int);
+    void dfs(int v)
+    {
+        reset();
+        int clock = 0;
+        int v = s;
+
+        do{
+            if(status(v) == UNDISCOVERED)
+                DFS(v, clock);
+            v = (++v) % n;
+        }while(s != v)
+    }
     void bcc(int);
     stack<Tv*> tSort(int);
     void prim(int);
     void dijkstra(int);
     template<typename PU> void pfs(int, PU);
 };
+
+template<typename Tv, typename Te>
+void graph<Tv, Te>::BFS(int v, int& clock)
+    {
+        queue<int> q;
+        q.enqueue(v);
+        status(v) = DISCOVERED;
+        while(!q.empty())
+        {
+            v = q.dequeue();
+            dTime(v) = ++clock;
+            for(int u = firstNbr(v), -1 < u; u = nextNbr(v, u))
+            {
+                if(status(u) == UNDISCOVERED)
+                {
+                    status(u) = DISCOVERED; // 如果定点 u 未被发现，入队
+                    q.enqueue(u);
+                    type(v, u) = TREE;  // 设置边的状态为 TREE 代表这条边被采纳
+                    parent(u) = v;  // 把 v 作为 u 的父节点
+                }
+                else    // 如果 u 在队列中(DISCOVERED)或已出队(VISITED)
+                    type(u, v) = CROSS;
+            }
+            status(v) = VISITED;    // 当 v 的所有邻边和相邻节点访问完成后，标记 v 为已访问
+        }
+    }
+
+template<typename Tv, typename Te>
+void graph<Tv, Te>::DFS(int v, int& clock)
+{
+    dTime(v) = ++clock;
+    status(v) = DISCOVERED;
+    for(int u = firstNbr(v), -1 < u; u = nextNbr(v, u))
+    {
+        switch (status(u))
+        {
+        case UNDISCOVERED:
+            type(v, u) = TREE;
+            parent(u) = v;
+            DFS(u, clock);
+            break;
+        case DISCOVERED:
+            type(v, u) = BACKWARD;
+            break;
+        default:
+            // 如果 v 更早被发现，把从v 到 u 的边设置为前向边，否则设置为跨边
+            type(v, u) = dTime(v) < dTime(u) ? FORWARD : CROSS;
+            break;
+        }
+    }
+    // 顶点 v 访问完成
+    status(v) = VISITED;
+    fTime(v) = ++clock;
+}
 
 #endif
