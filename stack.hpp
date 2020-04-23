@@ -19,10 +19,7 @@ public:
     {   return this->get(this->size() - 1); }
 
     T pop()
-    {   
-        if(this->size() > 0)
-            return this->remove(this->size() - 1);  
-    }
+    {   return this->remove(this->size() - 1);  }
 };
 
 #endif

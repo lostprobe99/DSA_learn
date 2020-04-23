@@ -36,7 +36,7 @@ private:
     int _size;
     bnode<T>* _root;
     virtual int update_height(bnode<T>* x); // 更新高度
-    int update_height_above(bnode<T>* x);   // 更新祖先高度
+    void update_height_above(bnode<T>* x);   // 更新祖先高度
 public:
     btree() : _size(0), _root(NULL);
     ~btree();

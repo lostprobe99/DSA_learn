@@ -1,6 +1,89 @@
-#include"btree.h"
-#include<algorithm>
+#ifndef _BTREE_H_
+#define _BTREE_H_
 
+#include<stdlib.h>
+#include"stack.hpp"
+#include"queue.hpp"
+#define bnodePosi(T) bnode<T>*
+
+template <typename T>
+struct bnode
+{
+    T data;
+    bnodePosi(T) parent;
+    bnodePosi(T) lchild;
+    bnodePosi(T) rchild;
+    int height;
+
+    bnode()
+    : parent(NULL), lchild(NULL), rchild(NULL),\
+      height(0) {};
+
+    bnode(T const & e,\
+          bnodePosi(T) p = NULL,\
+          bnodePosi(T) lc = NULL,\
+          bnodePosi(T) rc = NULL,\
+          int h = 1)
+    : data(e), parent(p), lchild(lc),\
+      rchild(rc), height(h) {} 
+
+    int          size() const;
+    bnodePosi(T) succ()// 取得当前节点的直接后继
+    {
+        bnodePosi(T) s = this;
+        if(s->rchild)
+        {
+            s = s->rchild;
+            while(s->lchild)    s = s->lchild;
+        }
+        else
+        {
+            while(s->parent->rchild == s)   s = s->parent;
+            s = s->parent;
+        }
+        return s;
+    }
+    bnodePosi(T) insertAsLc(T const & e);
+    bnodePosi(T) insertAsRc(T const & e);
+};
+
+template <typename T>
+class btree
+{
+private:
+    virtual int update_height(bnodePosi(T) x);
+    template<typename VST>
+    void visit_left_branch(bnodePosi(T) x, VST& visit, stack<bnodePosi(T)>& s);
+    void to_left_bottom(bnodePosi(T) x, stack<bnodePosi(T)>& s);
+public:
+    int _size;
+    bnodePosi(T) _root;
+    btree() : _size(0), _root(NULL) {}
+    ~btree();
+    int          size() const;
+    int          remove(bnodePosi(T) x);
+    bool         is_empty() const;
+    void         update_height_above(bnodePosi(T) x);
+    bnodePosi(T) root() const;
+    bnodePosi(T) insertAsRoot(const T& e);
+    bnodePosi(T) insertAsRc(bnodePosi(T) x, T const &e);
+    bnodePosi(T) insertAsLc(bnodePosi(T) x, T const &e);
+    template<typename VST>
+    void trav_pre(bnodePosi(T) x, VST visit);
+    template<typename VST>
+    void trav_pre_loop_I(bnodePosi(T) x, VST& visit);
+    template<typename VST>
+    void trav_pre_loop_II(bnodePosi(T) x, VST& visit);
+
+    template<typename VST>
+    void trav_in(bnodePosi(T) x, VST& visit);
+    template<typename VST>
+    void trav_in_loop_I(bnodePosi(T) x, VST& visit);
+    template<typename VST>
+    void trav_level(bnodePosi(T) x, VST& visit);
+};
+
+#include<algorithm>
 template <typename T>
 int bnode<T>::size() const
 {
@@ -64,7 +147,7 @@ inline int btree<T>::update_height(bnodePosi(T) x)
 }
 
 template <typename T>
-int btree<T>::update_height_above(bnodePosi(T) x)
+void btree<T>::update_height_above(bnodePosi(T) x)
 {
     while(x)
     {
@@ -209,3 +292,6 @@ void btree<T>::trav_level(bnodePosi(T) x, VST& visit)
             q.enqueue(x->rchild);
     }
 }
+
+
+#endif

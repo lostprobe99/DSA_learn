@@ -1,4 +1,7 @@
 #include "list.h"
+#include<iostream>
+using std::cout;
+using std::endl;
 
 template <typename T>
 posi(T) listnode<T>::insert_as_pred(T const & e)

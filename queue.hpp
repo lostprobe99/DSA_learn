@@ -10,13 +10,13 @@ public:
     queue() {}
     ~queue() {}
 
-    void queue<T>::enqueue(const T & e)
+    void enqueue(const T & e)
     {   this->insert_before(this->tail(), e);  }
 
-    T queue<T>::dequeue()
-    {   this->remove(this->first());    }
+    T dequeue()
+    {   return this->remove(this->first());    }
 
-    T & queue<T>::front() const
+    T & front() const
     {   return this->first()->data; }
 };
 
