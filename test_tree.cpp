@@ -49,9 +49,10 @@ void trav(btree<T>& t, VST& visit)
 template<typename T>
 void isnert_bst(BST<T>& b1)
 {
-    cout << b1.insert(42)->data << endl;
-    cout << b1.root()->data << endl;
-    // b1.insert(8);
+    // cout << b1.insert(42)->data << endl;
+    bnodePosi(int) t1 = b1.insert(42);
+    bnodePosi(int) t2 = b1.insert(8);
+    // exit(0);
     // b1.insert(64);
     // b1.insert(40);
 }
@@ -63,14 +64,13 @@ void trav_bst(BST<T>& b1, VST& visit)
     // b1.trav_pre(b1.root(), visit);
     // cout << endl;
 
-    // cout << "in tarv" << endl;
-    // b1.trav_in(b1.root(), visit);
-    // cout << endl;
+    cout << "in tarv" << endl;
+    b1.trav_in(b1.root(), visit);
+    cout << endl;
 
     // cout << "level tarv" << endl;
     // b1.trav_level(b1.root(), visit);
     // cout << endl;
-    cout << b1.root()->data << endl;
 }
 
 int main()

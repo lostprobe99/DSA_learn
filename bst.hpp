@@ -1,7 +1,8 @@
 /* binary search tree */
-#include"btree.hpp"
 #ifndef _BST_HPP_
 #define _BST_HPP_
+
+#include"btree.hpp"
 
 template<typename K, typename V> struct Entry{
     K key; V value;
@@ -16,16 +17,13 @@ template<typename K, typename V> struct Entry{
 
 template<typename T> class BST : public btree<T>
 {
-private:
+protected:
     bnodePosi(T) _hot;
     bnodePosi(T) connect34(bnodePosi(T), bnodePosi(T), bnodePosi(T), bnodePosi(T), bnodePosi(T), bnodePosi(T), bnodePosi(T));
-    static bnodePosi(T) removeAt(bnodePosi(T)&, bnodePosi(T)&);
-    static bnodePosi(T)& searchIn(bnodePosi(T)&, const T&, bnodePosi(T)&);
 public:
-    int _size;
-    bnodePosi(T) _root;
-    BST() : _size(0), _root(NULL) {}
-    virtual bnodePosi(T) search(const T&);    // 待查找的值是一个关键码，而非数据
+    bnodePosi(T) hot()
+    {   return _hot;    }
+    virtual bnodePosi(T)& search(const T&);    // 待查找的值是一个关键码，而非数据
     virtual bnodePosi(T) insert(const T& );
     virtual bool remove(const T& e)
     {
@@ -37,27 +35,27 @@ public:
     };
 };
 
-template<typename T> 
-bnodePosi(T) BST<T>::search(const T& x)
+template<typename T>
+static bnodePosi(T)& searchIn(bnodePosi(T)& v, const T& e, bnodePosi(T)& hot)
 {
-    bnodePosi(T) t = this->root();
-    while(t)
+    if(!v || v->data == e)  return v;
+    hot = v;
+    while (1)
     {
-        if(x < t->data)
-            t= t->lchild;
-        else if(x > t->data)
-            t= t->rchild;
-        else
-            break;
+        bnodePosi(T)& c = (e < hot->data) ? hot->lchild : hot->rchild;
+        if(!c || c->data == e)  return c;
+        hot = c;
     }
-    _hot = (t == NULL ? t : t->parent);
-    return t;
 }
+
+template<typename T> 
+inline bnodePosi(T)& BST<T>::search(const T& e)
+{   return searchIn(this->_root, e, _hot = NULL);  }
 
 template<typename T>
 bnodePosi(T) BST<T>::insert(const T& e)
 {
-    bnodePosi(T) x = search(e);
+    bnodePosi(T)& x = search(e);
     if(x)   return x;
     x = new bnode<T>(e, _hot);
     this->_size++;
@@ -66,7 +64,7 @@ bnodePosi(T) BST<T>::insert(const T& e)
 }
 
 template<typename T>
-bnodePosi(T) BST<T>::removeAt(bnodePosi(T)& x, bnodePosi(T)& hot)
+static bnodePosi(T) removeAt(bnodePosi(T)& x, bnodePosi(T)& hot)
 {
     bnodePosi(T) w = x;
     bnodePosi(T) succ = NULL;   // 取代 x 节点的节点
@@ -87,6 +85,22 @@ bnodePosi(T) BST<T>::removeAt(bnodePosi(T)& x, bnodePosi(T)& hot)
     // delete w->data; // 原本的 x 节点
     delete w;
     return succ;
+}
+
+template<typename T>
+bnodePosi(T) BST<T>::connect34(bnodePosi(T) a, bnodePosi(T) b, bnodePosi(T) c, \
+    bnodePosi(T) T0, bnodePosi(T) T1, bnodePosi(T) T2, bnodePosi(T) T3)
+{
+    a->lchild = T0; if(T0)  T0->parent = a;
+    a->rchild = T1; if(T1)  T1->parent = a;
+    update_height(a);
+    c->lchild = T2; if(T2)  T2->parent = a;
+    c->rchild = T3; if(T3)  T3->parent = a;
+    update_height(c);
+    b->lchild = a;  a->parent = b;
+    b->rchild = c;  c->parent = b;
+    update_height(b);
+    return b;
 }
 
 #endif

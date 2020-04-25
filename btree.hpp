@@ -47,17 +47,53 @@ struct bnode
     bnodePosi(T) insertAsRc(T const & e);
 };
 
+template<typename T>
+inline bool is_root(bnodePosi(T) x)
+{   return !(x->parent);  }
+
+template<typename T>
+inline bool is_lchild(bnodePosi(T) x)
+{   return !is_root(x) && (x == x->parent->lchild);  }
+
+template<typename T>
+inline bool is_rchild(bnodePosi(T) x)
+{   return !is_root(x) && (x == x->parent->rchild);  }
+
+template<typename T>
+inline bool has_parent(bnodePosi(T) x)
+{   return !is_root(x); }
+
+template<typename T>
+inline bool has_lchild(bnodePosi(T) x)
+{   return (x->lchild); }
+
+template<typename T>
+inline bool has_rchild(bnodePosi(T) x)
+{   return (x->rchild); }
+
+template<typename T>
+inline bool has_child(bnodePosi(T) x)
+{   return has_lchild(x) || has_rchild(x); }
+
+template<typename T>
+inline bool has_bothchild(bnodePosi(T) x)
+{   return has_lchild(x) && has_rchild(x); }
+
+template<typename T>
+inline bnodePosi(T)& from_parent_to(const bnodePosi(T)& x)
+{   return (is_root(x) ? _root : (is_lchild(x) ? x->parent->lchild : x->parent->rchild));   }
+
 template <typename T>
 class btree
 {
-private:
+protected:
+    int _size;
+    bnodePosi(T) _root;
     virtual int update_height(bnodePosi(T) x);
     template<typename VST>
     void visit_left_branch(bnodePosi(T) x, VST& visit, stack<bnodePosi(T)>& s);
     void to_left_bottom(bnodePosi(T) x, stack<bnodePosi(T)>& s);
 public:
-    int _size;
-    bnodePosi(T) _root;
     btree() : _size(0), _root(NULL) {}
     ~btree();
     int          size() const;
