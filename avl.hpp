@@ -4,7 +4,7 @@
 #include"bst.hpp"
 
 template<typename T>
-inline bnodePosi(T)& taller_child(const bnodePosi(T)& x)
+inline bnodePosi(T)& taller_child(bnodePosi(T)& x)
 {
     if(get_height(x->lchild) > get_height(x->rchild))
         return x->lchild;
@@ -24,35 +24,7 @@ inline int balanced_factor(bnodePosi(T) x)
 
 template<typename T>
 inline bool avl_balanced(bnodePosi(T) x)
-{   return (-2 < balanced_factor(x)) && (balanced_factor(x) < 2);   }
-
-template<typename T>
-static inline bnodePosi(T) rotateAt(bnodePosi(T) v)
-{
-    bnodePosi(T) p = v->parent; g = p->parent;
-    if(is_lchild(p))
-    {
-        if(is_lchild(v)){
-            p->parent = g->parent;  // 确立变换后的局部根节点
-            this->connect34(v, p, g, v->lchild, v->rchild, p->rchild, g->rchild);
-        }
-        else{
-            v->parent = g->parent;
-            this->connect34(p, v, g, p->lchild, v->lchild, v->rchild, g->rchild);
-        }
-    }
-    else
-    {
-        if(is_rchild(v)){
-            p->parent = g->parent;
-            this->connect34(g, p, v, g->lchild, p->lchild, v->lchild, v->rchild);
-        }
-        else{
-            v->parent = g->parent;
-            this->connect34(g, v, g, g->lchild, v->lchild, v->rchild, p->rchild);
-        }
-    }
-}
+{   return ((-2 < balanced_factor(x)) && (balanced_factor(x) < 2));   }
 
 template<typename T>
 class AVL : public BST<T>
@@ -65,35 +37,38 @@ public:
 template<typename T>
 bnodePosi(T) AVL<T>::insert(const T& e)
 {
-    bnodePosi(T)& x = search(e);
+    bnodePosi(T)& x = this->search(e);
     if(x)   return x;
     x = new bnode<T>(e, this->_hot);
+    bnodePosi(T) xx = x;
     this->_size++;
     for(bnodePosi(T) g = x->parent; g; g = g->parent)
     {
         if(!avl_balanced(g))    // 如果不平衡
         {
-            from_parent_to(x) = rotateAt(taller_child(taller_child(g)));
+            from_parent_to(x) = this->rotateAt(taller_child(taller_child(g)));
             break;
         }
         else    // 如果平衡
             this->update_height(x);    // 更新当前节点的高度
     }
+    return xx;
 }
 
 template<typename T>
 bool AVL<T>::remove(const T& e)
 {
-    bnodePosi(x)& = search(e);
+    bnodePosi(T)& x = this->search(e);
     if(!x)  return false;
-    removeAt(x, _hot);
-    _size--;
-    for(bnodePosi(T) g = _hot; g; g = g->parent)
+    removeAt(x, this->_hot);
+    this->_size--;
+    for(bnodePosi(T) g = this->_hot; g; g = g->parent)
     {
         if(!avl_balanced(x))
-            from_parent_to(g) = rotateAt(taller_child(taller_child(g)));
-        update_height(g);   // 所有的祖先节点都要更新高度
+            from_parent_to(g) = this->rotateAt(taller_child(taller_child(g)));
+        this->update_height(g);   // 所有的祖先节点都要更新高度
     }
+    return true;
 }
 
 #endif

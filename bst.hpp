@@ -20,6 +20,7 @@ template<typename T> class BST : public btree<T>
 protected:
     bnodePosi(T) _hot;
     bnodePosi(T) connect34(bnodePosi(T), bnodePosi(T), bnodePosi(T), bnodePosi(T), bnodePosi(T), bnodePosi(T), bnodePosi(T));
+    bnodePosi(T) rotateAt(bnodePosi(T));
 public:
     bnodePosi(T) hot()
     {   return _hot;    }
@@ -93,14 +94,43 @@ bnodePosi(T) BST<T>::connect34(bnodePosi(T) a, bnodePosi(T) b, bnodePosi(T) c, \
 {
     a->lchild = T0; if(T0)  T0->parent = a;
     a->rchild = T1; if(T1)  T1->parent = a;
-    update_height(a);
+    this->update_height(a);
     c->lchild = T2; if(T2)  T2->parent = a;
     c->rchild = T3; if(T3)  T3->parent = a;
-    update_height(c);
+    this->update_height(c);
     b->lchild = a;  a->parent = b;
     b->rchild = c;  c->parent = b;
-    update_height(b);
+    this->update_height(b);
     return b;
+}
+
+template<typename T>
+inline bnodePosi(T) BST<T>::rotateAt(bnodePosi(T) v)
+{
+    bnodePosi(T) p = v->parent; 
+    bnodePosi(T) g = p->parent;
+    if(is_lchild(p))
+    {
+        if(is_lchild(v)){
+            p->parent = g->parent;  // 确立变换后的局部根节点
+            return connect34(v, p, g, v->lchild, v->rchild, p->rchild, g->rchild);
+        }
+        else{
+            v->parent = g->parent;
+            return connect34(p, v, g, p->lchild, v->lchild, v->rchild, g->rchild);
+        }
+    }
+    else
+    {
+        if(is_rchild(v)){
+            p->parent = g->parent;
+            return connect34(g, p, v, g->lchild, p->lchild, v->lchild, v->rchild);
+        }
+        else{
+            v->parent = g->parent;
+            return connect34(g, v, g, g->lchild, v->lchild, v->rchild, p->rchild);
+        }
+    }
 }
 
 #endif

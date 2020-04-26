@@ -16,16 +16,12 @@ struct bnode
     int height;
 
     bnode()
-    : parent(NULL), lchild(NULL), rchild(NULL),\
-      height(0) {};
+    : parent(NULL), lchild(NULL), rchild(NULL), height(0)
+    {}
 
-    bnode(T const & e,\
-          bnodePosi(T) p = NULL,\
-          bnodePosi(T) lc = NULL,\
-          bnodePosi(T) rc = NULL,\
-          int h = 1)
-    : data(e), parent(p), lchild(lc),\
-      rchild(rc), height(h) {} 
+    bnode(T const & e, bnodePosi(T) p = NULL, bnodePosi(T) lc = NULL, bnodePosi(T) rc = NULL, int h = 0)
+    : data(e), parent(p), lchild(lc), rchild(rc), height(h)
+    {} 
 
     int          size() const;
     bnodePosi(T) succ()// 取得当前节点的直接后继
@@ -80,8 +76,8 @@ inline bool has_bothchild(bnodePosi(T) x)
 {   return has_lchild(x) && has_rchild(x); }
 
 template<typename T>
-inline bnodePosi(T)& from_parent_to(const bnodePosi(T)& x)
-{   return (is_root(x) ? _root : (is_lchild(x) ? x->parent->lchild : x->parent->rchild));   }
+inline bnodePosi(T)& from_parent_to(bnodePosi(T)& x)
+{   return (is_root(x) ? x : (is_lchild(x) ? x->parent->lchild : x->parent->rchild));   }
 
 template <typename T>
 class btree

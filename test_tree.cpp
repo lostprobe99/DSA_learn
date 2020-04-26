@@ -1,6 +1,7 @@
 #include <iostream>
 #include"btree.hpp"
 #include"bst.hpp"
+#include"avl.hpp"
 
 using std::endl;
 using std::cin;
@@ -72,17 +73,40 @@ void trav_bst(BST<T>& b1, VST& visit)
     // b1.trav_level(b1.root(), visit);
     // cout << endl;
 }
+template<typename T>
+void insert_avl(AVL<T>& avl1)
+{
+    cout << avl1.insert(42)->data << endl;
+    cout << avl1.insert(8)->data << endl;
+    cout << avl1.insert(16)->data << endl;
+}
+
+template<typename T, typename VST>
+void trav_avl(AVL<T>& avl1, VST& visit)
+{
+    cout << "avl in trav" << endl;
+    avl1.trav_in(avl1.root(), visit);
+    cout << endl;
+
+    avl1.remove(42);
+    cout << "avl in trav" << endl;
+    avl1.trav_in(avl1.root(), visit);
+    cout << endl;
+}
 
 int main()
 {
     btree<int> tree1;
     print<int> p;
     BST<int> b1;
+    AVL<int> avl1;
 
     // insert(tree1);
     // trav(tree1, p);
-    isnert_bst(b1);
-    trav_bst(b1, p);
+    // isnert_bst(b1);
+    // trav_bst(b1, p);
+    insert_avl(avl1);
+    trav_avl(avl1, p);
 
     return 0;
 }
