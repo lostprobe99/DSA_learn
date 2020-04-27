@@ -1,5 +1,5 @@
-#ifndef _BTREE_H_
-#define _BTREE_H_
+#ifndef _BINTREE_H_
+#define _BINTREE_H_
 
 #include<stdlib.h>
 #include"stack.hpp"
@@ -80,7 +80,7 @@ inline bnodePosi(T)& from_parent_to(bnodePosi(T)& x)
 {   return (is_root(x) ? x : (is_lchild(x) ? x->parent->lchild : x->parent->rchild));   }
 
 template <typename T>
-class btree
+class bintree
 {
 protected:
     int _size;
@@ -90,8 +90,8 @@ protected:
     void visit_left_branch(bnodePosi(T) x, VST& visit, stack<bnodePosi(T)>& s);
     void to_left_bottom(bnodePosi(T) x, stack<bnodePosi(T)>& s);
 public:
-    btree() : _size(0), _root(NULL) {}
-    ~btree();
+    bintree() : _size(0), _root(NULL) {}
+    ~bintree();
     int          size() const;
     int          remove(bnodePosi(T) x);
     bool         is_empty() const;
@@ -100,6 +100,8 @@ public:
     bnodePosi(T) insertAsRoot(const T& e);
     bnodePosi(T) insertAsRc(bnodePosi(T) x, T const &e);
     bnodePosi(T) insertAsLc(bnodePosi(T) x, T const &e);
+    bnodePosi(T) attachAsRc(bnodePosi(T) x, bintree<T>*& S);
+    bnodePosi(T) attachAsLc(bnodePosi(T) x, bintree<T>*& S);
     template<typename VST>
     void trav_pre(bnodePosi(T) x, VST visit);
     template<typename VST>
@@ -140,21 +142,21 @@ inline int get_height(bnodePosi(T) x)
 {   return x ? x->height : -1;  }
 
 template <typename T>
-btree<T>::~btree()
+bintree<T>::~bintree()
 {
     if(0 < _size)
         remove(_root);
 }
 
 template <typename T>
-bnodePosi(T) btree<T>::insertAsRoot(const T& e)
+bnodePosi(T) bintree<T>::insertAsRoot(const T& e)
 {
     _size = 1;
     return _root = new bnode<T>(e);
 }
 
 template <typename T>
-int btree<T>::remove(bnodePosi(T) x)
+int bintree<T>::remove(bnodePosi(T) x)
 {
     if(!x)  return 0;
 
@@ -172,14 +174,14 @@ int btree<T>::remove(bnodePosi(T) x)
 }
 
 template <typename T>
-inline int btree<T>::update_height(bnodePosi(T) x)
+inline int bintree<T>::update_height(bnodePosi(T) x)
 {
     return x->height = 1 +
         std::max(get_height(x->lchild), get_height(x->rchild));
 }
 
 template <typename T>
-void btree<T>::update_height_above(bnodePosi(T) x)
+void bintree<T>::update_height_above(bnodePosi(T) x)
 {
     while(x)
     {
@@ -189,19 +191,19 @@ void btree<T>::update_height_above(bnodePosi(T) x)
 }
 
 template <typename T>
-inline int btree<T>::size() const
+inline int bintree<T>::size() const
 {   return _size;   }
 
 template <typename T>
-inline bool btree<T>::is_empty() const
+inline bool bintree<T>::is_empty() const
 {   return !_root;  }
 
 template <typename T>
-inline bnodePosi(T) btree<T>::root() const
+inline bnodePosi(T) bintree<T>::root() const
 {   return _root;  }
 
 template <typename T>
-bnodePosi(T) btree<T>::insertAsRc(bnodePosi(T) x, T const &e)
+bnodePosi(T) bintree<T>::insertAsRc(bnodePosi(T) x, T const &e)
 {
     _size++;
     x->insertAsRc(e);
@@ -210,17 +212,39 @@ bnodePosi(T) btree<T>::insertAsRc(bnodePosi(T) x, T const &e)
 }
 
 template <typename T>
-bnodePosi(T) btree<T>::insertAsLc(bnodePosi(T) x, T const &e)
+bnodePosi(T) bintree<T>::insertAsLc(bnodePosi(T) x, T const &e)
 {
     _size++;
     x->insertAsLc(e);
     update_height_above(x);
     return x->lchild;
 }
+template<typename T>
+bnodePosi(T) bintree<T>::attachAsRc(bnodePosi(T) x, bintree<T>*& S)
+{
+    if(x->rchild = S->_root)    x->rchild->parent = x;
+    _size += S->_size;
+    update_height_above(x);
+    S->_root = NULL;
+    S->_size = 0;
+    S = NULL;
+    return x;
+}
+template<typename T>
+bnodePosi(T) bintree<T>::attachAsLc(bnodePosi(T) x, bintree<T>*& S)
+{
+    if(x->lchild = S->_root)    x->lchild->parent = x;
+    _size += S->_size;
+    update_height_above(x);
+    S->_root = NULL;
+    S->_size = 0;
+    S = NULL;
+    return x;
+}
 
 template <typename T>
 template <typename VST>
-void btree<T>::trav_pre(bnodePosi(T) x, VST visit)
+void bintree<T>::trav_pre(bnodePosi(T) x, VST visit)
 {
     if(!x)  return;
     visit(x->data);
@@ -230,7 +254,7 @@ void btree<T>::trav_pre(bnodePosi(T) x, VST visit)
 
 template <typename T>
 template<typename VST>
-void btree<T>::trav_pre_loop_I(bnodePosi(T) x, VST& visit)
+void bintree<T>::trav_pre_loop_I(bnodePosi(T) x, VST& visit)
 {
     stack<bnodePosi(T)> s;
     s.push(x);
@@ -247,7 +271,7 @@ void btree<T>::trav_pre_loop_I(bnodePosi(T) x, VST& visit)
 
 template<typename T>
 template<typename VST>
-void btree<T>::visit_left_branch(bnodePosi(T) x, VST& visit, stack<bnodePosi(T)>& s)
+void bintree<T>::visit_left_branch(bnodePosi(T) x, VST& visit, stack<bnodePosi(T)>& s)
 {
     while(x)
     {
@@ -259,7 +283,7 @@ void btree<T>::visit_left_branch(bnodePosi(T) x, VST& visit, stack<bnodePosi(T)>
 
 template<typename T>
 template<typename VST>
-void btree<T>::trav_pre_loop_II(bnodePosi(T) x, VST& visit)
+void bintree<T>::trav_pre_loop_II(bnodePosi(T) x, VST& visit)
 {
     stack<bnodePosi(T)> s;
     while(true)
@@ -273,7 +297,7 @@ void btree<T>::trav_pre_loop_II(bnodePosi(T) x, VST& visit)
 
 template <typename T>
 template<typename VST>
-void btree<T>::trav_in(bnodePosi(T) x, VST& visit)
+void bintree<T>::trav_in(bnodePosi(T) x, VST& visit)
 {
     if(!x)  return;
     trav_in(x->lchild, visit);
@@ -282,7 +306,7 @@ void btree<T>::trav_in(bnodePosi(T) x, VST& visit)
 }
 
 template<typename T>
-void btree<T>::to_left_bottom(bnodePosi(T) x, stack<bnodePosi(T)>& s)
+void bintree<T>::to_left_bottom(bnodePosi(T) x, stack<bnodePosi(T)>& s)
 {
     while(x)
     {
@@ -293,7 +317,7 @@ void btree<T>::to_left_bottom(bnodePosi(T) x, stack<bnodePosi(T)>& s)
 
 template <typename T>
 template<typename VST>
-void btree<T>::trav_in_loop_I(bnodePosi(T) x, VST& visit)
+void bintree<T>::trav_in_loop_I(bnodePosi(T) x, VST& visit)
 {
     stack<bnodePosi(T)> s;
 
@@ -310,7 +334,7 @@ void btree<T>::trav_in_loop_I(bnodePosi(T) x, VST& visit)
 
 template<typename T>
 template<typename VST>
-void btree<T>::trav_level(bnodePosi(T) x, VST& visit)
+void bintree<T>::trav_level(bnodePosi(T) x, VST& visit)
 {
     queue<bnodePosi(T)> q;
     q.enqueue(x);

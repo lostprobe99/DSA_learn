@@ -30,7 +30,7 @@ struct bnode
 
 ```c++
 template<typename T>
-class btree
+class bintree
 {
 private:
     int _size;
@@ -38,8 +38,8 @@ private:
     virtual int update_height(bnode<T>* x); // 更新高度
     void update_height_above(bnode<T>* x);   // 更新祖先高度
 public:
-    btree() : _size(0), _root(NULL);
-    ~btree();
+    bintree() : _size(0), _root(NULL);
+    ~bintree();
     int size() const;   // 返回树的规模
     int remove(bnode<T> * x); // 移除一棵子树
     bool empty();   // 判空
@@ -57,7 +57,7 @@ public:
 
 ```c++
 template <typename T> template <typename VST>
-void btree<T>::trav_pre_loop_I(bnode<T>* x, VST& visit)
+void bintree<T>::trav_pre_loop_I(bnode<T>* x, VST& visit)
 {
     stack<bnode<T *> > s;
     s.push(x);
@@ -81,7 +81,7 @@ void btree<T>::trav_pre_loop_I(bnode<T>* x, VST& visit)
 
 ```c++
 template<typename T> template<typename VST>
-void btree<T>::trav_pre_loop_II(bnode<T>* x, VST& visit)
+void bintree<T>::trav_pre_loop_II(bnode<T>* x, VST& visit)
 {
     stack<bnode<T>*> s;
     while(true)
@@ -106,7 +106,7 @@ void btree<T>::trav_pre_loop_II(bnode<T>* x, VST& visit)
 
 ```c++
 template<typename T> template<typename VST>
-void btree<T>::trav_in_loop_I(bnode<T>* x, VST& visit)
+void bintree<T>::trav_in_loop_I(bnode<T>* x, VST& visit)
 {
     stack<bnode<T>*> s;
     while(true)

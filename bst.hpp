@@ -2,7 +2,7 @@
 #ifndef _BST_HPP_
 #define _BST_HPP_
 
-#include"btree.hpp"
+#include"bintree.hpp"
 
 template<typename K, typename V> struct Entry{
     K key; V value;
@@ -15,7 +15,7 @@ template<typename K, typename V> struct Entry{
     bool operator>= (const Entry<K, V>& e) {    return key >= e.key;    }
 };
 
-template<typename T> class BST : public btree<T>
+template<typename T> class BST : public bintree<T>
 {
 protected:
     bnodePosi(T) _hot;

@@ -1,7 +1,8 @@
 #include <iostream>
-#include"btree.hpp"
+#include"bintree.hpp"
 #include"bst.hpp"
 #include"avl.hpp"
+#include "splay.hpp"
 
 using std::endl;
 using std::cin;
@@ -17,7 +18,7 @@ public:
 };
 
 template <typename T>
-void insert(btree<T>& t)
+void insert(bintree<T>& t)
 {
     t.insertAsRoot(0);
     t.insertAsLc(t.root(), 1);
@@ -28,7 +29,7 @@ void insert(btree<T>& t)
 }
 
 template <typename T, typename VST>
-void trav(btree<T>& t, VST& visit)
+void trav(bintree<T>& t, VST& visit)
 {
     cout << endl;
     t.trav_pre(t.root(), visit);
@@ -46,6 +47,14 @@ void trav(btree<T>& t, VST& visit)
     t.trav_level(t.root(), visit);
     cout << endl;
 }
+void test_bintree(void)
+{
+    bintree<int> tree1;
+    print<int> p;
+
+    insert(tree1);
+    trav(tree1, p);
+}
 
 template<typename T>
 void isnert_bst(BST<T>& b1)
@@ -53,7 +62,6 @@ void isnert_bst(BST<T>& b1)
     // cout << b1.insert(42)->data << endl;
     bnodePosi(int) t1 = b1.insert(42);
     bnodePosi(int) t2 = b1.insert(8);
-    // exit(0);
     // b1.insert(64);
     // b1.insert(40);
 }
@@ -73,6 +81,16 @@ void trav_bst(BST<T>& b1, VST& visit)
     // b1.trav_level(b1.root(), visit);
     // cout << endl;
 }
+
+void test_bst(void)
+{
+    BST<int> b1;
+    print<int> p;
+
+    isnert_bst(b1);
+    trav_bst(b1, p);
+}
+
 template<typename T>
 void insert_avl(AVL<T>& avl1)
 {
@@ -94,19 +112,45 @@ void trav_avl(AVL<T>& avl1, VST& visit)
     cout << endl;
 }
 
-int main()
+void test_avl(void)
 {
-    btree<int> tree1;
-    print<int> p;
-    BST<int> b1;
     AVL<int> avl1;
+    print<int> p;
 
-    // insert(tree1);
-    // trav(tree1, p);
-    // isnert_bst(b1);
-    // trav_bst(b1, p);
     insert_avl(avl1);
     trav_avl(avl1, p);
+}
+
+template<typename T>
+void insert_splay(Splay<T>& s1)
+{
+    cout << s1.insert(42)->data << endl;
+    cout << s1.insert(8)->data << endl;
+    cout << "inserted" << endl;
+}
+template<typename T, typename VST>
+void trav_splay(Splay<T>& s1, VST& visit)
+{
+    cout << "in trav" << endl;
+    s1.trav_in(s1.root(), visit);
+    cout << endl;
+}
+
+void test_splay(void)
+{
+    print<int> p;
+    Splay<int> s1;
+
+    insert_splay(s1);
+    trav_splay(s1, p);
+}
+
+int main()
+{
+    // test_bintree();
+    // test_bst();
+    // test_avl();
+    test_splay();
 
     return 0;
 }
