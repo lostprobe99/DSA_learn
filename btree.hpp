@@ -78,20 +78,26 @@ void BTree<T>::overflow(BTNodePosi(T) v)   // 处理上溢
         u->child.insert(i, v->child.remove(r + 1));
         u->key.insert(i, v->key.remove(r + 1));
     }
+    // child 比 key 多一个，移动剩下的 child
     u->child[_order - r - 1] = v->child.remove(r + 1);
-    if(u->child[0])
+    if(u->child[0]) // 把 u 设置为 u 内部 child 的父亲
     {
         for(int i = 0; i < u->child.size(); i++)
             u->child[i]->parent = u;
     }
-    BTNodePosi(T) p = v->parent;
+    BTNodePosi(T) p = v->parent;    // 验证 v 是否是根节点
     if(!p)
     {
-        _root = p = new BTNode<T>();
+        _root = p = new BTNode<T>();    // 如果是根节点，将当前的根节点设置为 v 
         p->child[0] = v;
         v->parent = p;
     }
     // incomplete
+    int s = p->key.search(v->key[r]) + 1;   // 在 p 的 key 中搜索 v 中要上移的 key
+    p->key.insert(s, v->key.remove(r)); // 删除 v 中要上移的 key ，并插入到 p 的 key 中
+    p->child.insert(s + 1, u);  // 把 u 插入到 p 的 child 中
+    u->parent = p;
+    overflow(p);    // 向上处理上溢
 }
 
 template<typename T>
