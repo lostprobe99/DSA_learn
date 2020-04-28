@@ -181,7 +181,7 @@ public:
             visit(_elem[i]);
     }
 
-    int search(T e, int lo, int hi)
+    int search(const T& e, int lo, int hi)
     {
         int mi = 0;
         while(lo + 1 < hi)
@@ -192,6 +192,9 @@ public:
         }
         return lo;
     }
+
+    int search(const T& e)
+    {   return search(e, 0, _size); }
 
     void swap(int x, int y)
     {
