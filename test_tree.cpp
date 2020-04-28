@@ -133,16 +133,20 @@ void trav_splay(Splay<T>& s1, VST& visit)
 {
     cout << "in trav" << endl;
     s1.trav_in(s1.root(), visit);
-    cout << endl;
+    cout << "in trav complete" << endl;
 }
 
 void test_splay(void)
 {
-    print<int> p;
+    print<int> visit;
+    cout << "splay" << endl;
     Splay<int> s1;
 
     insert_splay(s1);
-    trav_splay(s1, p);
+    // trav_splay(s1, p);
+    cout << "in trav" << endl;
+    s1.trav_in(s1.root(), visit);
+    cout << "in trav complete" << endl;
 }
 
 int main()
@@ -150,7 +154,16 @@ int main()
     // test_bintree();
     // test_bst();
     // test_avl();
-    test_splay();
+    // test_splay();
+    print<int> visit;
+    cout << "splay" << endl;
+    Splay<int> s1;
+
+    insert_splay(s1);
+    // trav_splay(s1, p);
+    cout << "in trav" << endl;
+    s1.trav_in(s1.root(), visit);
+    cout << "in trav complete" << endl;
 
     return 0;
 }
