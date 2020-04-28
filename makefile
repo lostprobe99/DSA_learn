@@ -1,9 +1,9 @@
-TARGET = ftree
+TARGET = test_tree
 
 all: $(TARGET)
 
-$(TARGET): test.tree.cpp bintree.hpp stack.hpp
-		g++ -g -std=c++11 -o $(TARGET) test.tree.cpp stack.hpp vec.hpp
+$(TARGET): test_tree.cpp 
+		g++ -g -std=c++11 -o $(TARGET) test_tree.cpp
 		mv $(TARGET) bin/
 	
 ftest: ftest.cpp
