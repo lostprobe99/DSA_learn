@@ -70,40 +70,112 @@ void BTree<T>::overflow(BTNodePosi(T) v)   // 处理上溢
 {
     if(_order >= v->child.size())   // 未发生上溢
         return;
-    
-    int r = _order / 2; // 取中点
+    int s = _order / 2; // 发生上溢时，必有 _order = v->key.size()
     BTNodePosi(T) u = new BTNode<T>();
-    for (int i = 0; i < _order - r - 1; i++)
+    // move v->key[s + 1, key.size() - 1] to u->key
+    for(int i = 0; i < _order - s - 1; i++)
     {
-        u->child.insert(i, v->child.remove(r + 1));
-        u->key.insert(i, v->key.remove(r + 1));
+        u->key.insert(i, v->key.remove(s + 1));
+        u->child.insert(i, v->child.remove(s + 1));
     }
-    // child 比 key 多一个，移动剩下的 child
-    u->child[_order - r - 1] = v->child.remove(r + 1);
-    if(u->child[0]) // 把 u 设置为 u 内部 child 的父亲
+    u->child[_order - s  1] = v->child.remove(s + 1);
+    if(u->child[0])
     {
         for(int i = 0; i < u->child.size(); i++)
             u->child[i]->parent = u;
     }
-    BTNodePosi(T) p = v->parent;    // 验证 v 是否是根节点
+    BTNodePosi(T) p = v->parent;
     if(!p)
     {
-        _root = p = new BTNode<T>();    // 如果是根节点，将当前的根节点设置为 v 
+        _root = p = new BTNode<T>();
         p->child[0] = v;
         v->parent = p;
     }
-    // incomplete
-    int s = p->key.search(v->key[r]) + 1;   // 在 p 的 key 中搜索 v 中要上移的 key
-    p->key.insert(s, v->key.remove(r)); // 删除 v 中要上移的 key ，并插入到 p 的 key 中
-    p->child.insert(s + 1, u);  // 把 u 插入到 p 的 child 中
+    int r = 1 + p->key.search(v->key[s]);
+    p->key.insert(r, v->key.remove(s));
+    p->child.insert(r + 1, u);
     u->parent = p;
-    overflow(p);    // 向上处理上溢
+    overflow(p);
 }
 
 template<typename T>
 void BTree<T>::underflow(BTNodePosi(T) v)  // 处理下溢
 {
+    if((_order + 1) / 2 <= v->key.size())   return;
+    BTNodePosi(T) p = v->parent;
+    if(!p)  // 此时 v 是树根
+    {
+        if(v->key.size() == 0 && v->child[0])   // 如果 v 没有关键码却有一个非空字节点
+        {
+            _root = v->child[0];
+            _root->parent = NULL;
+            v->child[0] = NULL;
+            delete v;
+        }
+    }
+    int r = 0;
+    while(p->child[r] != v) r++;    // 在 p 中查找 v 的位置
 
+    // 第一种情况，v 是右孩子，向左兄弟借关键码
+    if(r > 0)   // v 不是第一个孩子
+    {
+        BTNodePosi(T) l = parent->child[r - 1];
+        if((_order + 1) / 2 > l->child.size())
+        {
+            v->key.insert(0, p->key[r - 1]);
+            p->key[r - 1] = l->key.remove(l->key.size() - 1);
+            v->child.insert(0, l->child.remove(l->child.size() - 1));
+            if(v->child[0])  uv->child[0]->parent = v;
+            return;
+        }
+    }
+
+    // 第二种情况，向右兄弟借关键码
+    if(r < p->child.size() - 1) // v 不是最后一个孩子
+    {
+        BTNodePosi(T) r = p->child[r + 1];
+        if((_order + 1) / 2 < r->child.size())
+        {
+            v->key.insert(v->key.size(), p->key[r]);
+            p->key[r] = r->key.remove(0);
+            v->child.insert(v->child.size(), r->child.remove(0));
+            if(v->child[v->child.size() - 1])   v->child[v->child.size() - 1]->parent = v;
+            return;
+        }
+    }
+
+    // 第三种情况，左或右兄弟都无法借出，将其合并
+    if(0 < r)   // 向左合并
+    {
+        BTNodePosi(T) l = parent->child[r - 1];
+        l->key.insert(l->key.size(), p->key.remove(r - 1));
+        p->child.remove(r - 1);
+        l->child.insert(l->child.size(), v->child.remove(0));
+        if(l->child[l->child.size() - 1])   l->child[l->child.size() - 1]->parent = l;
+        // 此时，v 中 key 和 child 的长度相等
+        while(!v->key.empty())
+        {
+            l->child.insert(l->child.size(), v->child.remove(0));
+            l->key.insert(l->key.size(), v->key.remove(0));
+            if(l->child[l->child.size() - 1])   l->child[l->child.size() - 1]->parent = l;
+        }
+        delete v;
+    } else {    // 向右合并
+        BTNodePosi(T) r = parent->child[r + 1];
+        r->key.insert(r->key.size(, p->key.remove(r + 1)));
+        p->child.remove(r + 1);
+        r->child.insert(0, v->child.remove(v->child.size() - 1));
+        if(r->child[0]) r->child[0]->parent = r;
+        while(!v->key.empty())
+        {
+            r->child.insert(0, v->child.remove(0));
+            r->key.insert(0, v->key.remove(0))
+            if(r->child[0]) r->child[0]->parent = r;
+        }
+        delete v;
+    }
+    underflow(p);
+    return;
 }
 
 template<typename T>
