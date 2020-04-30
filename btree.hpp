@@ -210,13 +210,13 @@ bool BTree<T>::insert(const T& e)
 template<typename T>
 bool BTree<T>::remove(const T& e)
 {
-    bnodePosi(T) x = search(e);
+    BinNodePosi(T) x = search(e);
     if(!x)   return false;
     int r = x->key.search(e);
     // 查找 x 的直接后继
     if(x->child[0]) // 判断 x 是不是叶子节点
     {
-        bnodePosi(T) u = x->child[r + 1];
+        BinNodePosi(T) u = x->child[r + 1];
         while(u->child[0])  u = u->child[0];
         x->key[r] = u->key[0];  // 用 x 直接后继的最小 key 覆盖将要删除的 e 
         x = u;  // 此时，u 中的 key[0] 成为多余的元素

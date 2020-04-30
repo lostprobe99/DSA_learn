@@ -60,8 +60,8 @@ template<typename T>
 void isnert_bst(BST<T>& b1)
 {
     // cout << b1.insert(42)->data << endl;
-    bnodePosi(int) t1 = b1.insert(42);
-    bnodePosi(int) t2 = b1.insert(8);
+    BinNodePosi(int) t1 = b1.insert(42);
+    BinNodePosi(int) t2 = b1.insert(8);
     // b1.insert(64);
     // b1.insert(40);
 }
@@ -143,7 +143,7 @@ void test_splay(void)
     Splay<int> s1;
 
     insert_splay(s1);
-    // trav_splay(s1, p);
+    trav_splay(s1, visit);
     cout << "in trav" << endl;
     s1.trav_in(s1.root(), visit);
     cout << "in trav complete" << endl;
@@ -151,19 +151,19 @@ void test_splay(void)
 
 int main()
 {
-    // test_bintree();
-    // test_bst();
-    // test_avl();
-    // test_splay();
-    print<int> visit;
-    cout << "splay" << endl;
-    Splay<int> s1;
+    test_bintree();
+    test_bst();
+    test_avl();
+    test_splay();
+    // print<int> visit;
+    // cout << "splay" << endl;
+    // Splay<int> s1;
 
-    insert_splay(s1);
-    // trav_splay(s1, p);
-    cout << "in trav" << endl;
-    s1.trav_in(s1.root(), visit);
-    cout << "in trav complete" << endl;
+    // insert_splay(s1);
+    // trav_splay(s1, visit);
+    // cout << "in trav" << endl;
+    // s1.trav_in(s1.root(), visit);
+    // cout << "in trav complete" << endl;
 
     return 0;
 }

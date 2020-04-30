@@ -4,34 +4,34 @@ template<typename T>
 class Splay : public BST<T>
 {
 protected:
-    bnodePosi(T) splay(bnodePosi(T) v);
+    BinNodePosi(T) splay(BinNodePosi(T) v);
 public:
-    bnodePosi(T)& search(const T& e)
+    BinNodePosi(T)& search(const T& e)
     {
-        bnodePosi(T)& x = searchIn(this->_root, e, this->_hot = NULL);
+        BinNodePosi(T)& x = searchIn(this->_root, e, this->_hot = NULL);
         this->_root = splay(x ? x : this->_hot);    // 如果未找到元素，将其父节点移至根
         return this->_root;
     }
-    bnodePosi(T)  insert(const T& e)
+    BinNodePosi(T)  insert(const T& e)
     {
         if(!this->_root)  // 原树为空
         {
             this->_size++;
-            return this->_root = new bnode<T>(e);
+            return this->_root = new BinNode<T>(e);
         }
         // 该元素已存在
         if(e == search(e)->data)    return this->_root;
         // 上一句中已经执行过一次 search 也即执行过一次 splay
-        bnodePosi(T) t = this->_root;
+        BinNodePosi(T) t = this->_root;
         this->_size++;
         if(t->data < e){
-            this->_root->parent = this->_root = new bnode<T>(e, NULL, t, t->rchild);
+            this->_root->parent = this->_root = new BinNode<T>(e, NULL, t, t->rchild);
             if(has_rchild(t)){
                 t->rchild->parent = this->_root;
                 t->rchild = NULL;
             }
         } else {
-            this->_root->parent = this->_root = new bnode<T>(e, NULL, t->lchild, t);
+            this->_root->parent = this->_root = new BinNode<T>(e, NULL, t->lchild, t);
             if(has_lchild(t)){
                 t->lchild->parent = this->_root;
                 t->lchild = NULL;
@@ -43,7 +43,7 @@ public:
     bool remove(const T& e)
     {
         if(!this->_root || e != search(e)->data) return false;
-        bnodePosi(T) x = this->_root;
+        BinNodePosi(T) x = this->_root;
         if(!has_lchild(x)){
             this->_root = this->_root->rchild;
             if(this->_root)   this->_root->parent = NULL;
@@ -51,7 +51,7 @@ public:
             this->_root = this->_root->lchild;
             if(this->_root)   this->_root->parent = NULL;
         } else {
-            bnodePosi(T) lt = this->_root->lchild;
+            BinNodePosi(T) lt = this->_root->lchild;
             this->_root->lchild = NULL;   lt->parent = NULL;
             this->_root = this->_root->rchild;  this->_root->parent = NULL;
             search(x->data);    // 将右子树中最小的节点伸展到树根
@@ -65,27 +65,27 @@ public:
 };
 
 template<typename T> inline
-void attachAsRC(bnodePosi(T) p, bnodePosi(T) r)
+void attachAsRC(BinNodePosi(T) p, BinNodePosi(T) r)
 {
     p->rchild = r;
     if(r)   r->parent = p;
 }
 
 template<typename T> inline
-void attachAsLC(bnodePosi(T) p, bnodePosi(T) l)
+void attachAsLC(BinNodePosi(T) p, BinNodePosi(T) l)
 {
     p->lchild = l;
     if(l)   l->parent = p;
 }
 
 template<typename T>
-bnodePosi(T) Splay<T>::splay(bnodePosi(T) v)
+BinNodePosi(T) Splay<T>::splay(BinNodePosi(T) v)
 {
     if(!v)  return NULL;
-    bnodePosi(T) p; bnodePosi(T) g;
+    BinNodePosi(T) p; BinNodePosi(T) g;
     while((p = v->parent) && (g = v->parent))   // v 的祖先>=3层
     {
-        bnodePosi(T) gg = g->parent;
+        BinNodePosi(T) gg = g->parent;
         // 对局部进行旋转
         if(is_lchild(v)) {
             if(is_lchild(p)) {   // 左左

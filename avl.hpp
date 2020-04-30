@@ -4,7 +4,7 @@
 #include"bst.hpp"
 
 template<typename T>
-inline bnodePosi(T)& taller_child(bnodePosi(T)& x)
+inline BinNodePosi(T)& taller_child(BinNodePosi(T)& x)
 {
     if(get_height(x->lchild) > get_height(x->rchild))
         return x->lchild;
@@ -15,34 +15,34 @@ inline bnodePosi(T)& taller_child(bnodePosi(T)& x)
 }
 
 template<typename T>
-inline bool balanced(bnodePosi(T) x)    // 理想平衡
+inline bool balanced(BinNodePosi(T) x)    // 理想平衡
 {   return get_height(x->rchild) == get_height(x->lchild);  }
 
 template<typename T>
-inline int balanced_factor(bnodePosi(T) x)
+inline int balanced_factor(BinNodePosi(T) x)
 {   return (get_height(x->rchild) - get_height(x->lchild));   }
 
 template<typename T>
-inline bool avl_balanced(bnodePosi(T) x)
+inline bool avl_balanced(BinNodePosi(T) x)
 {   return ((-2 < balanced_factor(x)) && (balanced_factor(x) < 2));   }
 
 template<typename T>
 class AVL : public BST<T>
 {
 public:
-    bnodePosi(T) insert(const T&);
+    BinNodePosi(T) insert(const T&);
     bool remove(const T&);
 };
 
 template<typename T>
-bnodePosi(T) AVL<T>::insert(const T& e)
+BinNodePosi(T) AVL<T>::insert(const T& e)
 {
-    bnodePosi(T)& x = this->search(e);
+    BinNodePosi(T)& x = this->search(e);
     if(x)   return x;
-    x = new bnode<T>(e, this->_hot);
-    bnodePosi(T) xx = x;
+    x = new BinNode<T>(e, this->_hot);
+    BinNodePosi(T) xx = x;
     this->_size++;
-    for(bnodePosi(T) g = x->parent; g; g = g->parent)
+    for(BinNodePosi(T) g = x->parent; g; g = g->parent)
     {
         if(!avl_balanced(g))    // 如果不平衡
         {
@@ -58,11 +58,11 @@ bnodePosi(T) AVL<T>::insert(const T& e)
 template<typename T>
 bool AVL<T>::remove(const T& e)
 {
-    bnodePosi(T)& x = this->search(e);
+    BinNodePosi(T)& x = this->search(e);
     if(!x)  return false;
     removeAt(x, this->_hot);
     this->_size--;
-    for(bnodePosi(T) g = this->_hot; g; g = g->parent)
+    for(BinNodePosi(T) g = this->_hot; g; g = g->parent)
     {
         if(!avl_balanced(x))
             from_parent_to(g) = this->rotateAt(taller_child(taller_child(g)));

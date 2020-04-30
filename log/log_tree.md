@@ -6,23 +6,23 @@
 
 ```c++
 template<typename T>
-struct bnode
+struct BinNode
 {
     T data;
-    bnode<T> *parent, *lchild, *rchild;
+    BinNode<T> *parent, *lchild, *rchild;
     int height;
 
-    bnode()
+    BinNode()
     : parent(NULL), lchild(NULL), rchild(NULL), height(0)
     {}
 
-    bnode(const T& e, bnode<T>* p = NULL, bnode<T> *lc = NULL,bnode<T> *r = NULL, int h = 1)
+    BinNode(const T& e, BinNode<T>* p = NULL, BinNode<T> *lc = NULL,BinNode<T> *r = NULL, int h = 1)
     : data(e), parent(p), lchild(lc), rchild(rc), height(h)
     {}
 
     int size() const; // 返回当前节点以及所有后代的数量
-    bnode<T>* insertAsLC(const T& e);   // 作为左节点插入
-    bnode<T>* insertAsRC(const T& e);   // 作为右节点插入
+    BinNode<T>* insertAsLC(const T& e);   // 作为左节点插入
+    BinNode<T>* insertAsRC(const T& e);   // 作为右节点插入
 }
 ```
 
@@ -34,22 +34,22 @@ class bintree
 {
 private:
     int _size;
-    bnode<T>* _root;
-    virtual int update_height(bnode<T>* x); // 更新高度
-    void update_height_above(bnode<T>* x);   // 更新祖先高度
+    BinNode<T>* _root;
+    virtual int update_height(BinNode<T>* x); // 更新高度
+    void update_height_above(BinNode<T>* x);   // 更新祖先高度
 public:
     bintree() : _size(0), _root(NULL);
     ~bintree();
     int size() const;   // 返回树的规模
-    int remove(bnode<T> * x); // 移除一棵子树
+    int remove(BinNode<T> * x); // 移除一棵子树
     bool empty();   // 判空
-    bnode<T>* root() const; // 访问根
-    bnode<T>* isnertAsRoot(const T& e); // 作为根插入
-    bnode<T>* isnertAsRc(const T& e); // 作为右孩子插入
-    bnode<T>* isnertAsLc(const T& e); // 作为左孩子插入
+    BinNode<T>* root() const; // 访问根
+    BinNode<T>* isnertAsRoot(const T& e); // 作为根插入
+    BinNode<T>* isnertAsRc(const T& e); // 作为右孩子插入
+    BinNode<T>* isnertAsLc(const T& e); // 作为左孩子插入
     template<typename VST>
-    void trav_pre(bnode<T>* x, VST& visit); // 从x开始先序遍历
-    void trav_pre_loop(bnode<T>* x, VST& visit); // 以迭代方式进行先序遍历
+    void trav_pre(BinNode<T>* x, VST& visit); // 从x开始先序遍历
+    void trav_pre_loop(BinNode<T>* x, VST& visit); // 以迭代方式进行先序遍历
 }
 ```
 
@@ -57,9 +57,9 @@ public:
 
 ```c++
 template <typename T> template <typename VST>
-void bintree<T>::trav_pre_loop_I(bnode<T>* x, VST& visit)
+void bintree<T>::trav_pre_loop_I(BinNode<T>* x, VST& visit)
 {
-    stack<bnode<T *> > s;
+    stack<BinNode<T *> > s;
     s.push(x);
     while(!s.empty())
     {
@@ -81,9 +81,9 @@ void bintree<T>::trav_pre_loop_I(bnode<T>* x, VST& visit)
 
 ```c++
 template<typename T> template<typename VST>
-void bintree<T>::trav_pre_loop_II(bnode<T>* x, VST& visit)
+void bintree<T>::trav_pre_loop_II(BinNode<T>* x, VST& visit)
 {
-    stack<bnode<T>*> s;
+    stack<BinNode<T>*> s;
     while(true)
     {
         // 访问x的左支
@@ -106,9 +106,9 @@ void bintree<T>::trav_pre_loop_II(bnode<T>* x, VST& visit)
 
 ```c++
 template<typename T> template<typename VST>
-void bintree<T>::trav_in_loop_I(bnode<T>* x, VST& visit)
+void bintree<T>::trav_in_loop_I(BinNode<T>* x, VST& visit)
 {
-    stack<bnode<T>*> s;
+    stack<BinNode<T>*> s;
     while(true)
     {
         while(x)

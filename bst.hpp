@@ -18,17 +18,17 @@ template<typename K, typename V> struct Entry{
 template<typename T> class BST : public bintree<T>
 {
 protected:
-    bnodePosi(T) _hot;
-    bnodePosi(T) connect34(bnodePosi(T), bnodePosi(T), bnodePosi(T), bnodePosi(T), bnodePosi(T), bnodePosi(T), bnodePosi(T));
-    bnodePosi(T) rotateAt(bnodePosi(T));
+    BinNodePosi(T) _hot;
+    BinNodePosi(T) connect34(BinNodePosi(T), BinNodePosi(T), BinNodePosi(T), BinNodePosi(T), BinNodePosi(T), BinNodePosi(T), BinNodePosi(T));
+    BinNodePosi(T) rotateAt(BinNodePosi(T));
 public:
-    bnodePosi(T) hot()
+    BinNodePosi(T) hot()
     {   return _hot;    }
-    virtual bnodePosi(T)& search(const T&);    // 待查找的值是一个关键码，而非数据
-    virtual bnodePosi(T) insert(const T& );
+    virtual BinNodePosi(T)& search(const T&);    // 待查找的值是一个关键码，而非数据
+    virtual BinNodePosi(T) insert(const T& );
     virtual bool remove(const T& e)
     {
-        bnodePosi(T) x = search(e);
+        BinNodePosi(T) x = search(e);
         if(!x)  return false;
         removeAt(x, _hot);  // x 成为新节点，_hot 是 x 的父节点
         this->update_height_above(_hot);
@@ -37,38 +37,38 @@ public:
 };
 
 template<typename T>
-static bnodePosi(T)& searchIn(bnodePosi(T)& v, const T& e, bnodePosi(T)& hot)
+static BinNodePosi(T)& searchIn(BinNodePosi(T)& v, const T& e, BinNodePosi(T)& hot)
 {
     if(!v || v->data == e)  return v;
     hot = v;
     while (1)
     {
-        bnodePosi(T)& c = (e < hot->data) ? hot->lchild : hot->rchild;
+        BinNodePosi(T)& c = (e < hot->data) ? hot->lchild : hot->rchild;
         if(!c || c->data == e)  return c;
         hot = c;
     }
 }
 
 template<typename T> 
-inline bnodePosi(T)& BST<T>::search(const T& e)
+inline BinNodePosi(T)& BST<T>::search(const T& e)
 {   return searchIn(this->_root, e, _hot = NULL);  }
 
 template<typename T>
-bnodePosi(T) BST<T>::insert(const T& e)
+BinNodePosi(T) BST<T>::insert(const T& e)
 {
-    bnodePosi(T)& x = search(e);
+    BinNodePosi(T)& x = search(e);
     if(x)   return x;
-    x = new bnode<T>(e, _hot);
+    x = new BinNode<T>(e, _hot);
     this->_size++;
     this->update_height_above(x);
     return x;
 }
 
 template<typename T>
-static bnodePosi(T) removeAt(bnodePosi(T)& x, bnodePosi(T)& hot)
+static BinNodePosi(T) removeAt(BinNodePosi(T)& x, BinNodePosi(T)& hot)
 {
-    bnodePosi(T) w = x;
-    bnodePosi(T) succ = NULL;   // 取代 x 节点的节点
+    BinNodePosi(T) w = x;
+    BinNodePosi(T) succ = NULL;   // 取代 x 节点的节点
     if(!x->rchild){    // 不存在右节点  // 包含了左右节点皆空的情况
         succ = x = x->lchild;
     }
@@ -77,7 +77,7 @@ static bnodePosi(T) removeAt(bnodePosi(T)& x, bnodePosi(T)& hot)
     } else {    // 左右节点皆存在
         w = w->succ();
         std::swap(w->data, x->data);
-        bnodePosi(T) u = w->parent;
+        BinNodePosi(T) u = w->parent;
         // 代表 w 是 u 的右子节点，否则就是左子节点，因为如果 w 是 u 的左子节点，那么 w 就不可能是 x 的 succ()
         (u == x ? u->rchild : u->lchild) = succ = w->rchild;  // succ() 只有右孩子
     }
@@ -89,8 +89,8 @@ static bnodePosi(T) removeAt(bnodePosi(T)& x, bnodePosi(T)& hot)
 }
 
 template<typename T>
-bnodePosi(T) BST<T>::connect34(bnodePosi(T) a, bnodePosi(T) b, bnodePosi(T) c, \
-    bnodePosi(T) T0, bnodePosi(T) T1, bnodePosi(T) T2, bnodePosi(T) T3)
+BinNodePosi(T) BST<T>::connect34(BinNodePosi(T) a, BinNodePosi(T) b, BinNodePosi(T) c, \
+    BinNodePosi(T) T0, BinNodePosi(T) T1, BinNodePosi(T) T2, BinNodePosi(T) T3)
 {
     a->lchild = T0; if(T0)  T0->parent = a;
     a->rchild = T1; if(T1)  T1->parent = a;
@@ -105,10 +105,10 @@ bnodePosi(T) BST<T>::connect34(bnodePosi(T) a, bnodePosi(T) b, bnodePosi(T) c, \
 }
 
 template<typename T>
-inline bnodePosi(T) BST<T>::rotateAt(bnodePosi(T) v)
+inline BinNodePosi(T) BST<T>::rotateAt(BinNodePosi(T) v)
 {
-    bnodePosi(T) p = v->parent; 
-    bnodePosi(T) g = p->parent;
+    BinNodePosi(T) p = v->parent; 
+    BinNodePosi(T) g = p->parent;
     if(is_lchild(p))
     {
         if(is_lchild(v)){
