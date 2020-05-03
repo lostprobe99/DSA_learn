@@ -3,6 +3,7 @@
 #include"bst.hpp"
 #include"avl.hpp"
 #include "splay.hpp"
+#include"redblack.hpp"
 
 using std::endl;
 using std::cin;
@@ -147,6 +148,10 @@ void test_splay(void)
     cout << "in trav" << endl;
     s1.trav_in(s1.root(), visit);
     cout << "in trav complete" << endl;
+}
+
+void test_rbtree(void)
+{
 }
 
 int main()

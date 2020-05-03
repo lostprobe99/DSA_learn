@@ -36,7 +36,7 @@ int vec<T>::uniquify()
 ```
 时间复杂度：$O(n^2)$
 
-每次循环，`find` 在 $\_elem[0...i)$ 中查找 $\_elem[i]$ 是否存在，如果存在则调用 `remove​` 函数将其移除，​`remove` 通过把 $\_elem(i...n)$ 整体前移一位实现删除 $\_elem[i]$ 并且内部会将 $\_size$ 减一。
+每次循环，`find` 在 $\_elem[0...i)$ 中查找 $\_elem[i]$ 是否存在，如果存在则调用 `remove​` 函数将其移除，​`remove` 通过把 $\_elem(i+1...n)$ 整体前移一位实现删除 $\_elem[i]$ 并且内部会将 $\_size$ 减一。
 
 Each loop, `find` function find $\_elem[i]$ in $\_elem[0...i)$. If it exist, call the `remove` function remove it. `remove` by make $\_elem(i...n)$ forward one come true delete $\_elem[i]$ and inside make $\_size$ minus one.
 
