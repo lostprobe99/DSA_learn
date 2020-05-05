@@ -1,8 +1,8 @@
 /*
  * @Author: lostprobe99 
  * @Date: 2020-05-05 15:21:14 
- * @Last Modified by:   lostprobe99 
- * @Last Modified time: 2020-05-05 15:21:14 
+ * @Last Modified by: lostprobe99
+ * @Last Modified time: 2020-05-05 17:13:09
  */
 #ifndef _BITMAP_HPP_
 #define _BITMAP_HPP_
@@ -12,7 +12,7 @@
 #include<stdio.h>
 
 // 位图以一位为一个单位，而 N 是字节数
-class Btimap{
+class Bitmap{
 private:
     char * M;
     int N;
@@ -21,38 +21,40 @@ protected:
     {   M = new char[N = (n + 7) / 8];  memset(M, 0, N);}
 public:
     // 按规模创建一个 bitmap
-    Btimap(int n = 8)
+    Bitmap(int n = 8)
     {   init(n);    }
     // 用文件创建一个 bitmap
-    Btimap(char * file, int n = 8)
+    Bitmap(const char * const file, int n = 8)
     {
         init(n);
         FILE* fp = fopen(file, "r");
         fread(M, sizeof(char), N, fp);
         fclose(fp);
     }
-    ~Btimap()
+    ~Bitmap()
     {   delete [] M;  M = NULL;    }
 
     void set(int k)
     {
         expand(k);
-        M[k >> 3] |= 128 >> k;
+        M[k >> 3] |= (0x80 >> (k & 0x07));
     }
     // ~ 位非运算符
     void clear(int k)
     {
         expand(k);
-        M[k >> 3] &= ~(128 >> k);
+        M[k >> 3] &= ~(0x80 >> (k & 0x07));
     }
     bool test(int k)
     {
         expand(k);
-        return M[k >> 3] & (128 >> k);
+        return M[k >> 3] & (0x80 >> (k & 0x07));
     }
+    int size() const
+    {   return N;   }
 
     // 导出 bitmap 到文件
-    void dump(char * filename)
+    void dump(const char * const filename)
     {
         FILE* fp = fopen(filename, "w");
         fwrite(M, sizeof(char), N, fp);

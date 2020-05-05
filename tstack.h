@@ -1,6 +1,5 @@
 #pragma once
 
-#include"stack.h"
 #include"stack.hpp"
 
 void   test_stack();

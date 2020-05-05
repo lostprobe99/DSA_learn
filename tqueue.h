@@ -1,6 +1,5 @@
 #pragma once
 
-#include"queue.h"
 #include"queue.hpp"
 
 void test_que()
