@@ -4,14 +4,16 @@
  * @Last Modified by: lostprobe99
  * @Last Modified time: 2020-05-05 19:36:15
  */
+#include<string>
 #include<iostream>
 #include<fstream>
-#include<limits.h>
 #include"bitmap.hpp"
 #include"pub.cpp"
+#include"hashtable.hpp"
 using std::cout;
 using std::endl;
 using std::fstream;
+using std::string;
 
 void test_bitmap(void)
 {
@@ -37,10 +39,27 @@ void generate_prime()
     eratosthenes(prime_limit, filename);
 }
 
+void test_hashtable()
+{
+    Hashtable<string, int> h1;
+    cout << h1.size() << endl;
+    h1.put("hello", 0);
+    h1.put("world", 1);
+    cout << h1.size() << endl;
+    cout << *(h1.get("hello")) << endl;
+    cout << *(h1.get("world")) << endl;
+    cout << "h1[\"hello\"] = " << h1["hello"] << endl;
+    cout << "change h1[\"hello\"] to 3" << endl;
+    h1["hello"] = 3;
+    cout << "h1[\"hello\"] = " << h1["hello"] << endl;
+}
+
 int main()
 {
     // test_bitmap();
-    generate_prime();
+    // generate_prime();
+    test_hashtable();
+
 
     return 0;
 }
