@@ -12,6 +12,9 @@ public:
     bool empty() const
     {   return this->size() == 0 ? true : false;    }
 
+    bool is_empty() const
+    {   return empty(); }
+
     void push(T const & e)
     {   this->insert(this->size(), e); }
 

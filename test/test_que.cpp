@@ -1,6 +1,4 @@
-#pragma once
-
-#include"queue.hpp"
+#include"../queue.hpp"
 
 void test_que()
 {
@@ -15,3 +13,8 @@ void test_que()
     cout << q.empty() << endl;
 }
 
+int main()
+{
+    test_que();
+    return 0;
+}

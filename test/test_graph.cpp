@@ -1,4 +1,4 @@
-#include"graph_matrix.hpp"
+#include"../graph_matrix.hpp"
 #include<iostream>
 using std::cout;
 using std::endl;

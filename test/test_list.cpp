@@ -1,7 +1,4 @@
-#pragma once
-
-#include"list.h"
-#include"list.hpp"
+#include"../list.hpp"
 #include<iostream>
 #include<time.h>
 
@@ -41,4 +38,10 @@ void test_list()
     cout << hit->data << endl;
     cout << hit->succ->data << endl;
     cout << hit->pred->data << endl;
+}
+
+int main()
+{
+    test_list();
+    return 0;
 }

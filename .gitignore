@@ -8,3 +8,7 @@ bin/
 # single file
 4k+3.txt
 bitmap.txt
+CMakelists.txt
+
+# folder
+build

@@ -1,5 +1,4 @@
-#include"vec.hpp"
-#include"vec.h"
+#include"../vec.hpp"
 #include<iostream>
 using std::cin;
 using std::cout;

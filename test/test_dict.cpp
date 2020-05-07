@@ -7,9 +7,9 @@
 #include<string>
 #include<iostream>
 #include<fstream>
-#include"bitmap.hpp"
-#include"pub.cpp"
-#include"hashtable.hpp"
+#include"../bitmap.hpp"
+#include"../prime_generator.cpp"
+#include"../hashtable.hpp"
 using std::cout;
 using std::endl;
 using std::fstream;
@@ -59,7 +59,6 @@ int main()
     // test_bitmap();
     // generate_prime();
     test_hashtable();
-
 
     return 0;
 }

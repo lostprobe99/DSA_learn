@@ -1,9 +1,9 @@
 #include <iostream>
-#include"bintree.hpp"
-#include"bst.hpp"
-#include"avl.hpp"
-#include "splay.hpp"
-#include"redblack.hpp"
+#include"../bintree.hpp"
+#include"../bst.hpp"
+#include"../avl.hpp"
+#include "../splay.hpp"
+#include"../redblack.hpp"
 
 using std::endl;
 using std::cin;

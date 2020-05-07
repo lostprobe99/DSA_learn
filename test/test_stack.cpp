@@ -1,4 +1,4 @@
-#include"stack.hpp"
+#include"../stack.hpp"
 
 #include<iostream>
 #include<stdio.h>
@@ -161,10 +161,12 @@ void sys_convert()
         cout << s.pop();
     cout << endl;
 }
-void apply_stk()
-{
-    cout << "-----stack apply-----" << endl;
-    // sys_convert();
-    evaluate();
-}
 
+int main()
+{
+    test_stack();
+    evaluate();
+    sys_convert();
+
+    return 0;
+}
