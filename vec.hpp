@@ -1,12 +1,14 @@
-#pragma once
+#ifndef _VEC_HPP_
+#define _VEC_HPP_
 #include<stdlib.h>
 #include<string.h>
+#include"pq_ComplHeap.hpp"
 
 #define DEFAULT_CAPACITY 5
 
 template <typename T> class vec
 {
-private:
+protected:
     T * _elem;
     int _size, _capacity;
 
@@ -63,6 +65,14 @@ private:
         merge_sort(mi, hi);
         merge(lo, mi, hi);
     }
+    void heap_sort(int lo, int hi)
+    {
+        #if 0
+        pq_ComplHeap<T> H(_elem + lo, hi - lo);
+        while(!H.empty())
+            _elem[--hi] = H.del_max();
+        #endif
+    }
 
 public:
     vec(int c = DEFAULT_CAPACITY, int s = 0, T v = 0)
@@ -80,8 +90,11 @@ public:
     vec(T * a, int lo, int hi)
     {   copy_from(a, lo, hi);   }
 
-    ~vec()
+    virtual ~vec()
     {   delete [] _elem;    }
+
+    bool empty()
+    {   return _size ? false : true ;}
 
     int size() const
     {   return _size;   }
@@ -196,20 +209,23 @@ public:
     int search(const T& e)
     {   return search(e, 0, _size); }
 
-    void swap(int x, int y)
+    // param(x, y): index of will be swaped elem
+    inline void swap(int x, int y)
     {
         T e = _elem[x];
         _elem[x] = _elem[y];
         _elem[y] = e;
     }
 
-
     void sort(int lo, int hi)
     {
         // bubble_sort(lo, hi);
-        merge_sort(lo, hi);
+        // merge_sort(lo, hi);
+        heap_sort(lo, hi);
     }
 
     T& operator[](int r) const
     {   return _elem[r];    }
 };
+
+#endif

@@ -1,4 +1,5 @@
 #include"../vec.hpp"
+// #include"../pq_ComplHeap.hpp"
 #include<iostream>
 using std::cin;
 using std::cout;
@@ -63,4 +64,11 @@ void test_vec()
     {
         cout << (v1[i] = i) << " ";
     }
+}
+
+int main()
+{
+    test_vec();
+
+    return 0;
 }

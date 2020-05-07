@@ -4,19 +4,11 @@
 #include"../avl.hpp"
 #include "../splay.hpp"
 #include"../redblack.hpp"
+#include"pub_print.h"
 
 using std::endl;
 using std::cin;
 using std::cout;
-
-template <typename T>
-class print
-{
-public:
-    print(){}
-    void operator()(const T& e)
-    {   cout << e << endl;    }
-};
 
 template <typename T>
 void insert(bintree<T>& t)
