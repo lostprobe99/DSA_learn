@@ -11,5 +11,6 @@ int main()
     cout << posi << endl;
     cout << t + posi << endl;
 
+
     return 0;
 }
