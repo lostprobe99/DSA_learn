@@ -16,7 +16,7 @@ struct BinNode
     BinNodePosi(T) lchild;
     BinNodePosi(T) rchild;
     int height;
-    int npl;
+    int npl;    // 左式堆 Null Path Length
     RBColor color;
 
     BinNode()

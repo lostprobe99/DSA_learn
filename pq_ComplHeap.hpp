@@ -10,9 +10,14 @@
 #include"pq.h"
 #include"vec.hpp"
 
-template<typename T> class pq_ComplHeap : public PQ<T>, public vec<T> 
+template<typename T> 
+class pq_ComplHeap : public PQ<T>, public vec<T> 
 {
 private:
+    static inline void func()
+    {
+
+    }
     inline int parent(int i)
     {   return (i - 1) >> 1;}
     inline int rchild(int i)

@@ -220,8 +220,8 @@ public:
     void sort(int lo, int hi)
     {
         // bubble_sort(lo, hi);
-        // merge_sort(lo, hi);
-        heap_sort(lo, hi);
+        merge_sort(lo, hi);
+        // heap_sort(lo, hi);
     }
 
     T& operator[](int r) const
