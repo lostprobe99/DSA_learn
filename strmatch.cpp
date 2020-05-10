@@ -2,6 +2,7 @@
 #include<iostream>
 #include<algorithm>
 #include<climits>
+#include<cstdint>
 
 int* build_next(char *p)
 {
@@ -11,11 +12,12 @@ int* build_next(char *p)
     while(j < m - 1)
     {
         if(t < 0 || p[j] == p[t])
-        {   
+        {
             t++, j++;
-            N[j] = p[j] != p[t] ? t : N[t];
-            #ifdef V1
+            #ifdef KMP_V1
             N[j] = t;
+            #else
+            N[j] = p[j] != p[t] ? t : N[t];
             #endif
         }
         else    t = N[t];
@@ -131,4 +133,69 @@ std::cout << "进行了" << cnt << "次对比" << std::endl;
 #endif
     delete [] gs; delete [] bc;
     return i;
+}
+
+using HashCode = std::int64_t;
+const int R = 128;
+const int M = 97;
+
+inline int DIGIT(char c)
+{   return int(c - '0'); }
+
+int prepareDm(int m)
+{
+    HashCode Dm = 1;
+    for(int i = 1; i < m; i++)
+        Dm = (R * Dm) % M;
+    return Dm;
+}
+
+inline bool check1by1(char *p, char *t, int k)
+{
+    for(int m = strlen(p), i = 0; i < m; i++, k++)
+    {
+        if(p[i] != t[k])    return false;
+    }
+    return true;
+}
+
+void update_hash(HashCode& hashT, char *t, int m, int k, HashCode Dm)
+{
+    hashT = (hashT - DIGIT(t[k - 1]) * Dm) % M;
+    hashT = (hashT * R + DIGIT(t[k + m - 1])) % M;
+    if(hashT < 0)   hashT += M;
+}
+
+int kr_match(char *p, char *t)
+{
+#ifdef COUNT
+int cnt = 0;
+#endif
+    int m = strlen(p), n = strlen(t);
+    HashCode Dm = prepareDm(m), hashP = 0, hashT = 0;
+    for(int i = 0; i < m; i++)
+    {
+        hashP = (hashP * R + DIGIT(p[i])) % M;  // 模式串对应的散列值
+        hashT = (hashT * R + DIGIT(t[i])) % M;  // 文本串前 m 项的散列值
+    }
+    for(int k = 0; ; )
+    {
+        if(hashP == hashT && check1by1(p, t, k))
+        {
+#ifdef COUNT
+cnt++;
+std::cout << "进行了" << cnt << "次对比" << std::endl;
+#endif
+            return k;
+        }
+        k++;
+        if(k > n - m)
+        {
+    #ifdef COUNT
+    std::cout << "进行了" << cnt << "次对比" << std::endl;
+    #endif
+            return k;
+        } 
+        else update_hash(hashT, t, m, k, Dm);
+    }
 }

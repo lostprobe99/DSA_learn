@@ -2,7 +2,7 @@
 #define _VEC_HPP_
 #include<stdlib.h>
 #include<string.h>
-#include"pq_ComplHeap.hpp"
+// #include"pq_ComplHeap.hpp"
 
 #define DEFAULT_CAPACITY 5
 
@@ -72,6 +72,25 @@ protected:
         while(!H.empty())
             _elem[--hi] = H.del_max();
         #endif
+    }
+    int parition(int lo, int hi)
+    {
+        int mi = lo;
+        T pivot = _elem[mi];
+        for(int i = lo + 1; i <= hi; i++)
+        {
+            if(_elem[i] < pivot)
+                swap(i, ++mi);
+        }
+        swap(lo, mi);
+        return mi;
+    }
+    void quick_sort(int lo, int hi)
+    {
+        if(hi - lo < 2) return;
+        int mi = parition(lo, hi - 1);
+        quick_sort(lo, mi);
+        quick_sort(mi + 1, hi);
     }
 
 public:
@@ -220,8 +239,9 @@ public:
     void sort(int lo, int hi)
     {
         // bubble_sort(lo, hi);
-        merge_sort(lo, hi);
+        // merge_sort(lo, hi);
         // heap_sort(lo, hi);
+        quick_sort(lo, hi);
     }
 
     T& operator[](int r) const
