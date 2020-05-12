@@ -1,6 +1,9 @@
 # vscode setting
 .vscode/
 
+# LOC (lineCount Extension default folder)
+out/*
+
 # programing
 *.exe
 bin/
